@@ -13,8 +13,12 @@
 
 ### Consume module version
 
+* Modify the tag in the module
+
 ```tf
 module "sos-infrasctructure" {
   source = "git::https://github.com/tdfacer/terrafacer.git//terraform/modules/sos?ref=v2.0.0"
 }
 ```
+
+* Re-run `terraform init` to pull down the latest tag
