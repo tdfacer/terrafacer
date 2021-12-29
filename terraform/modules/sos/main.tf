@@ -34,12 +34,12 @@ resource "aws_iam_user" "user" {
 }
 
 resource "aws_iam_access_key" "key" {
-  user = "${aws_iam_user.user.name}"
+  user = aws_iam_user.user.name
 }
 
 resource "aws_iam_user_policy" "policy" {
   name = "sos-user"
-  user = "${aws_iam_user.user.name}"
+  user = aws_iam_user.user.name
 
   policy = <<EOF
 {
