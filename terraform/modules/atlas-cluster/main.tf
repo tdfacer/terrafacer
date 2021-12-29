@@ -11,8 +11,9 @@ resource "mongodbatlas_project" "project" {
 }
 
 resource "mongodbatlas_cluster" "cluster-test" {
-  project_id = mongodbatlas_project.project.id
-  name       = var.cluster_name
+  project_id                   = mongodbatlas_project.project.id
+  name                         = var.cluster_name
+  auto_scaling_disk_gb_enabled = false
 
   # Provider Settings "block"
   provider_name               = "TENANT"
