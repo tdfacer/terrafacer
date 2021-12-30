@@ -46,7 +46,7 @@ resource "mongodbatlas_cluster" "cluster" {
 resource "mongodbatlas_database_user" "user" {
   username           = var.user_name
   password           = var.user_password
-  project_id         = var.project_id
+  project_id         = mongodbatlas_project.project.id
   auth_database_name = "admin"
 
   roles {
