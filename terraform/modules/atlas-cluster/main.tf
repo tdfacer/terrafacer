@@ -14,6 +14,9 @@ variable "cluster_version" {
   type = string
 }
 
+# database
+variable "database_name" {}
+
 resource "mongodbatlas_project" "project" {
   name   = var.project_name
   org_id = var.org_id
@@ -36,34 +39,19 @@ resource "mongodbatlas_cluster" "cluster" {
   provider_instance_size_name = "M0"
 }
 
-# resource "mongodbatlas_database_user" "user" {
-#   username           = var.user_name
-#   password           = var.user_password
-#   project_id         = var.project_id
-#   auth_database_name = "admin"
+resource "mongodbatlas_database_user" "user" {
+  username           = var.user_name
+  password           = var.user_password
+  project_id         = var.project_id
+  auth_database_name = "admin"
 
-#   roles {
-#     role_name     = "readWrite"
-#     database_name = "dbforApp"
-#   }
+  roles {
+    role_name     = "readWrite"
+    database_name = var.database_name
+  }
 
-#   roles {
-#     role_name     = "readAnyDatabase"
-#     database_name = "admin"
-#   }
-
-#   labels {
-#     key   = "My Key"
-#     value = "My Value"
-#   }
-
-#   scopes {
-#     name = "My cluster name"
-#     type = "CLUSTER"
-#   }
-
-#   scopes {
-#     name = "My second cluster name"
-#     type = "CLUSTER"
-#   }
-# }
+  scopes {
+    name = var.cluster_name
+    type = "CLUSTER"
+  }
+}
