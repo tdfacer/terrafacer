@@ -21,6 +21,14 @@ variable "database_name" {}
 variable "user_name" {}
 variable "user_password" {}
 
+# access
+variable "whitelist_ips" {
+  type = map(object({
+    ip          = string
+    description = string
+  }))
+}
+
 resource "mongodbatlas_project" "project" {
   name   = var.project_name
   org_id = var.org_id
@@ -58,4 +66,12 @@ resource "mongodbatlas_database_user" "user" {
     name = var.cluster_name
     type = "CLUSTER"
   }
+}
+
+resource "mongodbatlas_project_ip_access_list" "access_list" {
+  project_id = mongodbatlas_project.project.id
+  for_each   = var.whitelist_ips
+
+  ip_address = each.value.ip
+  comment    = each.value.description
 }
