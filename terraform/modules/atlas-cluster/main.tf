@@ -3,6 +3,9 @@ variable "project_name" {}
 variable "org_id" {}
 
 # cluster
+variable "create_cluster" {
+  type = bool
+}
 variable "cluster_name" {}
 
 resource "mongodbatlas_project" "project" {
@@ -11,6 +14,7 @@ resource "mongodbatlas_project" "project" {
 }
 
 resource "mongodbatlas_cluster" "cluster-test" {
+  count                        = var.create_cluster == true ? 1 : 0
   project_id                   = mongodbatlas_project.project.id
   name                         = var.cluster_name
   auto_scaling_disk_gb_enabled = false
