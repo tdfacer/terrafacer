@@ -10,6 +10,9 @@ variable "create_cluster" {
   type = bool
 }
 variable "cluster_name" {}
+variable "cluster_version" {
+  type = string
+}
 
 resource "mongodbatlas_project" "project" {
   name   = var.project_name
@@ -24,6 +27,7 @@ resource "mongodbatlas_cluster" "cluster" {
   project_id                   = mongodbatlas_project.project.id
   name                         = var.cluster_name
   auto_scaling_disk_gb_enabled = false
+  mongo_db_major_version       = var.cluster_version
 
   # Provider Settings "block"
   provider_name               = "TENANT"
