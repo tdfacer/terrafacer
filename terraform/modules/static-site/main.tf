@@ -165,8 +165,10 @@ resource "aws_iam_user_policy" "user_policy" {
         "s3:*"
       ],
       "Effect": "Allow",
-      "Resource": "${module.s3_bucket.s3_bucket_arn}",
-      "Resource": "${module.s3_bucket.s3_bucket_arn}/*"
+      "Resource": [
+        "${module.s3_bucket.s3_bucket_arn}",
+        "${module.s3_bucket.s3_bucket_arn}/*"
+       ]
     }
   ]
 }
