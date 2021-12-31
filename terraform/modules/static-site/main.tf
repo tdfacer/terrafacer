@@ -88,7 +88,8 @@ module "cloudfront" {
   aliases = [var.domain_name]
 
   default_cache_behavior = {
-    target_origin_id       = format("s3-%s-static-site", var.app_name)
+    # target_origin_id       = format("s3-%s-static-site", var.app_name)
+    target_origin_id       = "website"
     viewer_protocol_policy = "allow-all"
 
     allowed_methods = ["GET", "HEAD", "OPTIONS"]
