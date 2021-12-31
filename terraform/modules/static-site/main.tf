@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "web_distribution" {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = [module.cloudfront.cloudfront_origin_access_identity_iam_arns]
+      identifiers = module.cloudfront.cloudfront_origin_access_identity_iam_arns
     }
     resources = [module.s3_bucket.s3_bucket_arn]
   }
