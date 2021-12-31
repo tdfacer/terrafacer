@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "web_distribution" {
       type        = "AWS"
       identifiers = module.cloudfront.cloudfront_origin_access_identity_iam_arns
     }
-    resources = [module.s3_bucket.s3_bucket_arn]
+    resources = [format("%s/*"), module.s3_bucket.s3_bucket_arn]
   }
 }
 
@@ -97,7 +97,7 @@ module "cloudfront" {
 
   origin = {
     website = {
-      domain_name = var.domain_name
+      domain_name = module.s3_bucket.s3_bucket_arn.s3_bucket_website_domain
       s3_origin_config = {
         origin_access_identity = "s3_bucket_one"
       }
