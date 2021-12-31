@@ -97,7 +97,7 @@ module "cloudfront" {
 
   origin = {
     website = {
-      domain_name = module.s3_bucket.s3_bucket.s3_bucket_website_domain
+      domain_name = module.s3_bucket.s3_bucket_website_domain
       s3_origin_config = {
         origin_access_identity = "s3_bucket_one"
       }
