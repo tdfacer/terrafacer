@@ -71,6 +71,9 @@ module "s3_bucket" {
 module "cloudfront" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "2.9.1"
+  depends_on = [
+    module.s3_bucket
+  ]
 
   enabled             = true
   retain_on_delete    = false
