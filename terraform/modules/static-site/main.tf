@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "web_distribution" {
       type        = "AWS"
       identifiers = module.cloudfront.cloudfront_origin_access_identity_iam_arns
     }
-    resources = [format("%s/*"), module.s3_bucket.s3_bucket_arn]
+    resources = [format("%s/*", module.s3_bucket.s3_bucket_arn)]
   }
 }
 
