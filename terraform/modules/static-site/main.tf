@@ -1,12 +1,20 @@
+# variables
+
+## global
+
 variable "app_name" {
   type        = string
   description = "the name of the static site app"
 }
 
+## s3
+
 variable "bucket_name" {
   type        = string
   description = "the name of the s3 bucket to store the static site in"
 }
+
+## dns
 
 variable "domain_name" {
   type        = string
@@ -18,15 +26,11 @@ variable "zone_id" {
   description = "the hosted zone ID for the domain"
 }
 
+## acm
+
 variable "acm_certificate_arn" {
   type        = string
   description = "the acm certificate that CloudFront should use for the static site"
-}
-
-variable "region" {
-  type        = string
-  default     = "us-east-1"
-  description = "the region for the static website domain name"
 }
 
 data "aws_iam_policy_document" "web_distribution" {
@@ -131,4 +135,39 @@ resource "aws_route53_record" "dns" {
     zone_id                = module.cloudfront.cloudfront_distribution_hosted_zone_id
     evaluate_target_health = true
   }
+}
+
+# iam user
+
+resource "aws_iam_user" "user" {
+  name = var.app_name
+  path = "/"
+
+  tags = {
+    app = var.app_name
+  }
+}
+
+resource "aws_iam_access_key" "access_key" {
+  user = aws_iam_user.user.name
+}
+
+resource "aws_iam_user_policy" "user_policy" {
+  name = format("%s-policy", var.app_name)
+  user = aws_iam_user.user.name
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "${module.s3_bucket.s3_bucket_arn}/*"
+    }
+  ]
+}
+EOF
 }
