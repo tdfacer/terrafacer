@@ -97,7 +97,10 @@ module "cloudfront" {
 
   origin = {
     website = {
-      domain_name = module.s3_bucket.s3_bucket_website_endpoint
+      domain_name = format("http://%s-us-east-1.amazonaws.com", var.bucket_name)
+      # domain_name = module.s3_bucket.s3_bucket_website_endpoint
+
+      # domain_name = "http://family-goals.trevorfacer.com.s3-website-us-east-1.amazonaws.com"
       s3_origin_config = {
         origin_access_identity = "s3_bucket_one"
       }
