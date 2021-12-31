@@ -63,7 +63,9 @@ module "s3_bucket" {
   control_object_ownership = true
   object_ownership         = "BucketOwnerPreferred"
 
-  app_name = var.app_name
+  tags = {
+    app_name = var.app_name
+  }
 }
 
 module "cloudfront" {
