@@ -37,8 +37,8 @@ resource "aws_s3_bucket_policy" "web_distribution" {
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket        = var.bucket_name
-  acl           = "public-read"
+  bucket = var.bucket_name
+  # acl           = "public-read"
   force_destroy = true
 
   # attach_policy = true
