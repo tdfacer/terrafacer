@@ -13,6 +13,11 @@ variable "domain_name" {
   description = "the domain name that should be used to point to the static site"
 }
 
+variable "zone_id" {
+  type        = string
+  description = "the hosted zone ID for the domain"
+}
+
 variable "acm_certificate_arn" {
   type        = string
   description = "the acm certificate that CloudFront should use for the static site"
@@ -121,5 +126,17 @@ module "cloudfront" {
 
   tags = {
     app_name = var.app_name
+  }
+}
+
+resource "aws_route53_record" "dns" {
+  zone_id = var.zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = module.cloudfront.cloudfront_distribution_domain_name
+    zone_id                = module.cloudfront.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = true
   }
 }
