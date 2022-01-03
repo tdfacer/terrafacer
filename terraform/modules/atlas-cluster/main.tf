@@ -1,5 +1,17 @@
 # global
 # variable "environment" {}
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "aws_account_id" {
+  type = string
+}
 
 # project
 variable "project_name" {}
@@ -74,4 +86,30 @@ resource "mongodbatlas_project_ip_access_list" "access_list" {
 
   ip_address = each.value.ip
   comment    = each.value.description
+}
+
+data "mongodbatlas_cluster" "cluster" {
+  project_id = mongodbatlas_project.project.id
+  name       = mongodbatlas_project.project.name
+}
+
+resource "mongodbatlas_network_peering" "network_peering" {
+  # count                = var.create_cluster == true ? 1 : 0
+  accepter_region_name = var.region
+  project_id           = mongodbatlas_project.project.id
+  # container_id           = mongodbatlas_cluster.cluster[0].container_id
+  # container_id           = mongodbatlas_cluster.cluster.container_id
+  container_id = data.mongodbatlas_cluster.cluster.container_id
+  # container_id           = mongodbatlas_cluster.cluster[0].container_id
+  provider_name          = "AWS"
+  route_table_cidr_block = "192.168.0.0/24"
+  vpc_id                 = var.vpc_id
+  aws_account_id         = var.aws_account_id
+}
+
+resource "aws_vpc_peering_connection_accepter" "peer" {
+  # count                     = var.create_cluster == true ? 1 : 0
+  # vpc_peering_connection_id = mongodbatlas_network_peering.network_peering[0].connection_id
+  vpc_peering_connection_id = mongodbatlas_network_peering.network_peering.connection_id
+  auto_accept               = true
 }
